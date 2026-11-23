@@ -1,154 +1,513 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Whoop live</title>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Whoop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 <style>
-:root{--text-primary:#FAFAFA;--text-secondary:#B8B6B0;--text-tertiary:#8A8882;--font-mono:ui-monospace,Menlo,Consolas,monospace;color-scheme:dark}
-body{margin:0;padding:28px 16px 60px;background:#050506;color:var(--text-primary);font-family:-apple-system,BlinkMacSystemFont,Inter,system-ui,sans-serif}
-main{max-width:640px;margin:0 auto}
-.section-title{font-family:Georgia,serif;font-style:italic;font-size:34px;margin-bottom:16px}
-</style></head><body><main>
-  <!-- ===== WHOOP card ===== -->
-  <style>
-    .whoop-section { margin-bottom: 32px; }
-    .whoop-card { padding: 22px 22px 18px; background: rgba(255,255,255,0.025); border: 1px solid transparent; border-radius: 22px; box-shadow: 0 1px 0 0 rgba(255,255,255,0.06) inset, 0 12px 40px rgba(0,0,0,0.45), 0 1px 2px rgba(0,0,0,0.25); }
-    .whoop-brand { display: inline-flex; align-items: center; gap: 8px; }
-    .whoop-brand-mark { width: 22px; height: 22px; border-radius: 50%; background: #FFFFFF; color: #0A0A0B; font-weight: 900; font-size: 12px; display: inline-flex; align-items: center; justify-content: center; letter-spacing: -0.04em; box-shadow: 0 0 12px rgba(255,255,255,0.20); }
-    .whoop-brand-text { font-weight: 800; font-size: 13px; letter-spacing: 0.18em; color: var(--text-primary); }
-    .whoop-disconnected { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 18px 8px 8px; gap: 6px; }
-    .whoop-disconnected .whoop-brand { margin-bottom: 14px; }
-    .whoop-disconnected-title { font-size: 22px; font-weight: 700; color: var(--text-primary); letter-spacing: -0.02em; margin-top: 2px; }
-    .whoop-disconnected-sub { font-size: 13px; color: var(--text-tertiary); max-width: 280px; line-height: 1.5; margin-bottom: 18px; }
-    .whoop-connect-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 22px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.85); background: linear-gradient(180deg, #FFFFFF 0%, #E8E5DD 100%); color: #0A0A0B; font-family: inherit; font-size: 13.5px; font-weight: 700; cursor: pointer; transition: transform 0.12s, box-shadow 0.18s, background 0.18s; box-shadow: inset 0 1px 0 rgba(255,255,255,0.55), 0 6px 20px rgba(0,0,0,0.45); }
-    .whoop-connect-btn:hover { background: linear-gradient(180deg, #FFFFFF 0%, #F2F0EA 100%); transform: translateY(-1px); }
-    .whoop-conn-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; }
-    .whoop-conn-actions { display:flex; align-items:center; gap:8px; }
-    .whoop-refresh-btn { width:30px; height:30px; border-radius:50%; background:transparent; border:1px solid rgba(255,255,255,0.10); color:var(--text-tertiary); cursor:pointer; display:inline-flex; align-items:center; justify-content:center; transition:color 0.15s, border-color 0.15s, transform 0.4s; }
-    .whoop-refresh-btn:hover { color:var(--text-primary); border-color:rgba(255,255,255,0.20); }
-    .whoop-refresh-btn.is-spinning { transform:rotate(360deg); }
-    .whoop-disc-btn { background:transparent; border:1px solid rgba(255,255,255,0.10); color:var(--text-tertiary); padding:6px 12px; border-radius:999px; cursor:pointer; font-family:inherit; font-size:11px; letter-spacing:0.04em; }
-    .whoop-disc-btn:hover { color:var(--text-secondary); border-color:rgba(255,255,255,0.20); }
-    .whoop-err { background:rgba(255,107,107,0.08); border:1px solid rgba(255,107,107,0.28); color:#FF8A8A; padding:10px 12px; border-radius:10px; font-size:11.5px; font-family:var(--font-mono); margin-bottom:14px; }
-    .whoop-grid { display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; }
-    @media (max-width: 480px) { .whoop-grid { grid-template-columns:repeat(2, 1fr); } }
-    .whoop-cell { background:rgba(255,255,255,0.025); border:1px solid transparent; border-radius:12px; padding:14px 12px; text-align:center; }
-    .whoop-cell-label { font-size:10px; color:var(--text-tertiary); text-transform:uppercase; letter-spacing:0.14em; font-weight:700; margin-bottom:6px; }
-    .whoop-cell-val { font-size:22px; font-weight:700; color:var(--text-primary); font-variant-numeric:tabular-nums; letter-spacing:-0.03em; line-height:1; }
-    .whoop-cell-sub { font-size:10px; color:var(--text-tertiary); margin-top:5px; font-variant-numeric:tabular-nums; font-family:var(--font-mono); }
-  </style>
-  <div class="whoop-section">
-    <div class="section-title">Whoop</div>
-    <div class="whoop-card">
-      <div id="whoopDisconnected" class="whoop-disconnected">
-        <div class="whoop-brand"><span class="whoop-brand-mark">W</span><span class="whoop-brand-text">WHOOP</span></div>
-        <div class="whoop-disconnected-title">Not connected</div>
-        <div class="whoop-disconnected-sub">Link your account to see live recovery, sleep, and strain.</div>
-        <button id="whoopConnectBtn" class="whoop-connect-btn" type="button">Connect WHOOP</button>
-      </div>
-      <div id="whoopConnected" class="whoop-connected" style="display:none">
-        <div class="whoop-conn-head">
-          <div class="whoop-brand"><span class="whoop-brand-mark">W</span><span class="whoop-brand-text">WHOOP</span></div>
-          <div class="whoop-conn-actions">
-            <button id="whoopRefreshBtn" type="button" class="whoop-refresh-btn" aria-label="Refresh"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6"/><path d="M20.49 15A9 9 0 1 1 5.64 5.64L23 10"/></svg></button>
-            <button id="whoopDisconnectBtn" type="button" class="whoop-disc-btn">Disconnect</button>
-          </div>
-        </div>
-        <div id="whoopErr" class="whoop-err" style="display:none"></div>
-        <div class="whoop-grid">
-          <div class="whoop-cell"><div class="whoop-cell-label">Recovery</div><div id="whoopRecovery" class="whoop-cell-val">—</div><div id="whoopRecoverySub" class="whoop-cell-sub">—</div></div>
-          <div class="whoop-cell"><div class="whoop-cell-label">Sleep</div><div id="whoopSleep" class="whoop-cell-val">—</div><div id="whoopSleepSub" class="whoop-cell-sub">—</div></div>
-          <div class="whoop-cell"><div class="whoop-cell-label">Strain</div><div id="whoopStrain" class="whoop-cell-val">—</div><div class="whoop-cell-sub">today</div></div>
-          <div class="whoop-cell"><div class="whoop-cell-label">HRV</div><div id="whoopHrv" class="whoop-cell-val">—</div><div class="whoop-cell-sub">ms</div></div>
-          <div class="whoop-cell"><div class="whoop-cell-label">RHR</div><div id="whoopRhr" class="whoop-cell-val">—</div><div class="whoop-cell-sub">bpm</div></div>
-          <div class="whoop-cell"><div class="whoop-cell-label">Resp</div><div id="whoopResp" class="whoop-cell-val">—</div><div class="whoop-cell-sub">rpm</div></div>
-        </div>
-      </div>
+:root{
+  --bg:#050506;--card:rgba(255,255,255,0.035);--card2:rgba(255,255,255,0.025);--line:rgba(255,255,255,0.07);
+  --t1:#FAFAFA;--t2:#B8B6B0;--t3:#8A8882;--t4:#55534E;
+  --accent:#E07658;--good:#6BE3A4;--warn:#F2C063;--bad:#FF8A8A;--blue:#7FB2FF;
+  --font:-apple-system,BlinkMacSystemFont,"Inter",system-ui,sans-serif;--mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --serif:'Instrument Serif',Georgia,serif;color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--t1);font-family:var(--font);-webkit-font-smoothing:antialiased}
+body{padding:22px 14px 70px}
+.wrap{max-width:900px;margin:0 auto}
+h1{font-family:var(--serif);font-style:italic;font-weight:400;font-size:40px;letter-spacing:-0.02em;margin:0}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+.status{font-size:11.5px;color:var(--t3);font-family:var(--mono)}
+.btn{background:rgba(255,255,255,0.05);border:1px solid var(--line);color:var(--t2);font:inherit;font-size:12px;padding:7px 13px;border-radius:999px;cursor:pointer}
+.btn:hover{color:var(--t1);background:rgba(255,255,255,0.09)}
+.btn.primary{background:linear-gradient(180deg,#fff,#E8E5DD);color:#0A0A0B;border-color:#fff;font-weight:700;padding:11px 22px;font-size:13.5px}
+.card{background:var(--card);border-radius:20px;padding:20px;margin-bottom:16px;box-shadow:0 1px 0 0 rgba(255,255,255,0.05) inset,0 10px 34px rgba(0,0,0,0.4)}
+.eyebrow{font-size:10px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--t3)}
+.h2{font-size:16px;font-weight:650;margin:0 0 4px}
+.sub{font-size:12px;color:var(--t3);margin:0 0 14px}
+.tabs{display:flex;gap:4px;background:rgba(255,255,255,0.04);border-radius:999px;padding:3px;margin-bottom:16px;overflow-x:auto}
+.tabs button,.seg button{background:none;border:0;color:var(--t3);font:inherit;font-size:12.5px;font-weight:600;padding:8px 14px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.tabs button.on,.seg button.on{background:rgba(255,255,255,0.1);color:var(--t1)}
+.seg{display:inline-flex;background:rgba(255,255,255,0.04);border-radius:999px;padding:3px;flex-wrap:wrap}
+.seg button{font-size:11.5px;padding:6px 11px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px}
+/* hero */
+.hero{display:grid;grid-template-columns:220px 1fr;gap:20px;align-items:center}
+@media(max-width:640px){.hero{grid-template-columns:1fr}}
+.ring-wrap{position:relative;width:220px;max-width:70vw;aspect-ratio:1;margin:0 auto}
+.ring{width:100%;height:100%;transform:rotate(-90deg)}
+.ring-c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring-n{font-size:58px;font-weight:700;letter-spacing:-0.04em;line-height:1;font-variant-numeric:tabular-nums}
+.ring-u{font-size:10px;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:var(--t3);margin-top:8px}
+.ring-l{font-size:12.5px;font-weight:650;margin-top:4px}
+.tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+@media(max-width:480px){.tiles{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.tile{background:var(--card2);border-radius:12px;padding:12px 10px;position:relative}
+.tl{font-size:9.5px;color:var(--t3);text-transform:uppercase;letter-spacing:0.13em;font-weight:700}
+.tv{font-size:22px;font-weight:700;margin-top:6px;font-variant-numeric:tabular-nums;letter-spacing:-0.02em}
+.tv small{font-size:11px;color:var(--t3);font-weight:500;margin-left:2px}
+.ts{font-size:10.5px;color:var(--t3);margin-top:3px;font-family:var(--mono)}
+.dot{position:absolute;top:10px;right:10px;width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,0.12)}
+.d-good{background:var(--good)}.d-norm{background:rgba(255,255,255,0.35)}.d-warn{background:var(--warn)}.d-bad{background:var(--bad)}
+.live{display:inline-flex;align-items:center;gap:5px;font-size:9.5px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--good)}
+.live i{width:6px;height:6px;border-radius:50%;background:var(--good);animation:p 1.6s infinite}
+@keyframes p{50%{opacity:.4}}
+.call{margin-top:16px;padding:14px 16px;background:var(--card2);border-left:3px solid var(--t4);border-radius:0 12px 12px 0;font-size:13px;line-height:1.55;color:var(--t2)}
+.call b{color:var(--t1)}
+/* charts */
+.chart{position:relative;margin-top:18px}
+.ct{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:6px}
+.ct b{font-size:13px;font-weight:650}.ct span{font-size:11px;color:var(--t3);font-family:var(--mono)}
+.chart svg{display:block;width:100%;height:auto}
+.chart text{fill:var(--t3);font-size:10px;font-family:var(--mono)}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:10.5px;color:var(--t3);margin-top:6px}
+.legend i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+.tip{position:absolute;pointer-events:none;background:rgba(22,22,24,0.97);border:1px solid rgba(255,255,255,0.1);border-radius:9px;padding:7px 9px;font-size:11.5px;white-space:nowrap;opacity:0;transition:opacity .1s;z-index:5;box-shadow:0 8px 24px rgba(0,0,0,.5)}
+.tip .d{color:var(--t3);font-size:10.5px;font-family:var(--mono);margin-bottom:2px}
+/* tables */
+.tw{overflow-x:auto;margin-top:10px}
+table{width:100%;border-collapse:collapse;font-size:12px;font-variant-numeric:tabular-nums}
+th{text-align:left;font-size:9.5px;letter-spacing:0.13em;text-transform:uppercase;color:var(--t3);font-weight:700;padding:8px 6px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:9px 6px;border-bottom:1px solid rgba(255,255,255,0.04);color:var(--t2);white-space:nowrap}
+td:first-child{color:var(--t1)}
+.num{text-align:right}
+.zbar{display:flex;height:8px;width:110px;border-radius:4px;overflow:hidden;gap:1px;background:rgba(255,255,255,0.05)}
+.zbar span{height:100%}
+.sum{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-bottom:6px}
+select{background:rgba(255,255,255,0.05);color:var(--t1);border:1px solid var(--line);border-radius:999px;padding:7px 12px;font:inherit;font-size:12px}
+.empty{color:var(--t3);font-size:12.5px;padding:10px 0}
+.err{background:rgba(255,107,107,0.08);border:1px solid rgba(255,107,107,0.28);color:var(--bad);padding:10px 12px;border-radius:10px;font-size:12px;font-family:var(--mono);margin-bottom:14px}
+.connect{text-align:center;padding:40px 10px}
+.connect p{color:var(--t3);font-size:13px;max-width:320px;margin:10px auto 20px;line-height:1.5}
+.progress{font-size:12px;color:var(--t3);margin-top:10px}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <h1>Whoop</h1>
+    <div id="topActions" hidden style="display:flex;gap:8px;align-items:center">
+      <span class="status" id="status">—</span>
+      <button class="btn" id="refreshBtn">Refresh</button>
+      <button class="btn" id="discBtn">Disconnect</button>
     </div>
   </div>
-  <script>
-  (function () {
-    const KEY = 'whoop_tokens_v1';
-    const CLIENT_ID = '98f1fb98-66fd-4027-ac09-d94bcc4ebbb7';
-    const REDIRECT  = window.location.origin + '/api/whoop-callback';
-    const SCOPES    = 'read:recovery read:sleep read:workout read:cycles read:profile read:body_measurement offline';
-    function loadTokens() { try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
-    function saveTokens(t) { try { localStorage.setItem(KEY, JSON.stringify(t)); } catch {} }
-    function clearTokens() { try { localStorage.removeItem(KEY); } catch {} }
-    if (location.hash && location.hash.indexOf('whoop_access') !== -1) {
-      const h = new URLSearchParams(location.hash.slice(1));
-      const access = h.get('whoop_access'), refresh = h.get('whoop_refresh');
-      const expires = Number(h.get('whoop_expires')) || (Date.now() + 3500*1000);
-      if (access) { saveTokens({ access, refresh, expires }); history.replaceState(null, '', location.pathname + location.search); }
-    }
-    const dEl = document.getElementById('whoopDisconnected');
-    const cEl = document.getElementById('whoopConnected');
-    const errEl = document.getElementById('whoopErr');
-    document.getElementById('whoopConnectBtn').addEventListener('click', () => {
-      const url = 'https://api.prod.whoop.com/oauth/oauth2/auth'
-        + '?client_id=' + encodeURIComponent(CLIENT_ID)
-        + '&redirect_uri=' + encodeURIComponent(REDIRECT)
-        + '&response_type=code'
-        + '&scope=' + encodeURIComponent(SCOPES)
-        + '&state=' + Math.random().toString(36).slice(2);
-      location.href = url;
-    });
-    document.getElementById('whoopDisconnectBtn').addEventListener('click', () => { clearTokens(); render(); });
-    document.getElementById('whoopRefreshBtn').addEventListener('click', async (e) => {
-      e.currentTarget.classList.add('is-spinning');
-      try { await loadData(); } finally { setTimeout(() => e.currentTarget && e.currentTarget.classList.remove('is-spinning'), 600); }
-    });
-    function showErr(m) { errEl.textContent = m || ''; errEl.style.display = m ? 'block' : 'none'; }
-    async function refreshToken(t) {
-      if (!t.refresh) return null;
-      try {
-        const r = await fetch('/api/whoop-refresh', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ refresh_token: t.refresh }) });
-        const j = await r.json();
-        if (j.access_token) { const next = { access: j.access_token, refresh: j.refresh_token || t.refresh, expires: Date.now() + (j.expires_in||3500)*1000 }; saveTokens(next); return next; }
-      } catch {} return null;
-    }
-    async function whoopFetch(path, t) {
-      const [p, qs] = path.split('?');
-      const params = new URLSearchParams(qs || ''); params.set('path', p);
-      const r = await fetch('/api/whoop-data?' + params.toString(), { headers: { 'Authorization': 'Bearer ' + t.access, 'Accept':'application/json' } });
-      if (r.status === 401) { const n = await refreshToken(t); if (n) return whoopFetch(path, n); throw new Error('unauthorized'); }
-      if (!r.ok) throw new Error('WHOOP ' + r.status + ': ' + (await r.text()));
-      return await r.json();
-    }
-    function fmtMins(ms) { const m = Math.round(ms/60000); const h = Math.floor(m/60); return h + 'h ' + String(m%60).padStart(2,'0') + 'm'; }
-    async function loadData() {
-      let t = loadTokens(); if (!t) return;
-      if (t.expires && Date.now() > t.expires - 60000) { const n = await refreshToken(t); if (n) t = n; }
-      showErr('');
-      try {
-        const [rec, sleep, cycle] = await Promise.all([
-          whoopFetch('/recovery?limit=1', t).catch((e)=>{console.error('[whoop] /recovery:', e.message); return null;}),
-          whoopFetch('/activity/sleep?limit=1', t).catch((e)=>{console.error('[whoop] /sleep:', e.message); return null;}),
-          whoopFetch('/cycle?limit=1', t).catch((e)=>{console.error('[whoop] /cycle:', e.message); return null;}),
-        ]);
-        const r = rec && rec.records && rec.records[0] && rec.records[0].score;
-        if (r) {
-          document.getElementById('whoopRecovery').textContent = Math.round(r.recovery_score||0) + '%';
-          document.getElementById('whoopHrv').textContent = Math.round(r.hrv_rmssd_milli||0);
-          document.getElementById('whoopRhr').textContent = Math.round(r.resting_heart_rate||0);
-          document.getElementById('whoopRecoverySub').textContent = r.recovery_score>=67?'high recovery':r.recovery_score>=34?'moderate':'low';
-        }
-        const s = sleep && sleep.records && sleep.records[0];
-        if (s && s.score && s.score.stage_summary) {
-          const ss = s.score.stage_summary;
-          const total = (ss.total_in_bed_time_milli||0) - (ss.total_awake_time_milli||0);
-          document.getElementById('whoopSleep').textContent = fmtMins(total);
-          document.getElementById('whoopSleepSub').textContent = Math.round(s.score.sleep_performance_percentage||0) + '% perf';
-          document.getElementById('whoopResp').textContent = (s.score.respiratory_rate||0).toFixed(1);
-        }
-        const c = cycle && cycle.records && cycle.records[0] && cycle.records[0].score;
-        if (c && c.strain != null) document.getElementById('whoopStrain').textContent = c.strain.toFixed(1);
-      } catch (e) { showErr(e.message || String(e)); }
-    }
-    function render() {
-      const t = loadTokens();
-      if (t && t.access) { dEl.style.display='none'; cEl.style.display=''; loadData(); }
-      else { dEl.style.display=''; cEl.style.display='none'; }
-    }
-    render();
-  })();
-  </script>
-</main></body></html>
+
+  <div id="errBox" class="err" hidden></div>
+
+  <!-- Disconnected -->
+  <div id="disconnected" class="card connect" hidden>
+    <div class="eyebrow">Not connected</div>
+    <p>Link your Whoop account to load your full history, workouts, sleep, calories and steps.</p>
+    <button class="btn primary" id="connectBtn">Connect WHOOP</button>
+  </div>
+
+  <!-- Loading -->
+  <div id="loading" class="card connect" hidden>
+    <div class="eyebrow">Loading your history</div>
+    <div class="progress" id="progress">Starting…</div>
+  </div>
+
+  <!-- App -->
+  <div id="app" hidden>
+    <div class="tabs" id="tabs">
+      <button data-tab="today" class="on">Today</button>
+      <button data-tab="trends">Trends</button>
+      <button data-tab="workouts">Workouts</button>
+      <button data-tab="sleep">Sleep</button>
+    </div>
+
+    <!-- TODAY -->
+    <section data-pane="today">
+      <div class="card">
+        <div class="row"><span class="eyebrow" id="todayDate">Today</span><span class="live"><i></i>auto-updating</span></div>
+        <div class="hero" style="margin-top:10px">
+          <div class="ring-wrap">
+            <svg class="ring" viewBox="0 0 220 220"><circle cx="110" cy="110" r="96" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="12"/><circle id="ringFill" cx="110" cy="110" r="96" fill="none" stroke="#fff" stroke-width="12" stroke-linecap="round" stroke-dasharray="603.19" stroke-dashoffset="603.19" style="transition:stroke-dashoffset .8s"/></svg>
+            <div class="ring-c"><div class="ring-n" id="recNum">—</div><div class="ring-u">recovery</div><div class="ring-l" id="recLbl">—</div></div>
+          </div>
+          <div class="tiles" id="todayTiles"></div>
+        </div>
+        <div class="call" id="call">—</div>
+      </div>
+      <div class="card">
+        <h2 class="h2">Today's workouts</h2>
+        <div id="todayWorkouts"></div>
+      </div>
+    </section>
+
+    <!-- TRENDS -->
+    <section data-pane="trends" hidden>
+      <div class="card">
+        <div class="row">
+          <h2 class="h2" style="margin:0">Trends</h2>
+          <div class="seg" id="rangeSeg"><button data-r="7">7d</button><button data-r="30" class="on">30d</button><button data-r="90">90d</button><button data-r="365">1y</button><button data-r="99999">All</button></div>
+        </div>
+        <div id="trendSummary" class="sum" style="margin-top:12px"></div>
+        <div class="chart" id="cRec"></div>
+        <div class="chart" id="cHrv"></div>
+        <div class="chart" id="cRhr"></div>
+        <div class="chart" id="cStrain"></div>
+        <div class="chart" id="cCal"></div>
+        <div class="chart" id="cSteps"></div>
+        <div class="chart" id="cDayHr"></div>
+      </div>
+    </section>
+
+    <!-- WORKOUTS -->
+    <section data-pane="workouts" hidden>
+      <div class="card">
+        <div class="row">
+          <h2 class="h2" style="margin:0">Workout log</h2>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <select id="sportSel"><option value="">All activities</option></select>
+            <div class="seg" id="woRange"><button data-r="30" class="on">30d</button><button data-r="90">90d</button><button data-r="365">1y</button><button data-r="99999">All</button></div>
+          </div>
+        </div>
+        <div id="woSummary" class="sum" style="margin-top:12px"></div>
+        <div class="chart" id="cWoWeek"></div>
+        <div class="legend"><span><i style="background:#3A3A3E"></i>Zone 0–1</span><span><i style="background:#7FB2FF"></i>Zone 2</span><span><i style="background:#6BE3A4"></i>Zone 3</span><span><i style="background:#F2C063"></i>Zone 4</span><span><i style="background:#FF8A8A"></i>Zone 5</span></div>
+        <div class="tw"><table>
+          <thead><tr><th>Date</th><th>Activity</th><th class="num">Time</th><th class="num">Strain</th><th class="num">Cal</th><th class="num">Avg HR</th><th class="num">Max HR</th><th>HR zones</th><th class="num">Dist</th></tr></thead>
+          <tbody id="woBody"></tbody>
+        </table></div>
+        <div style="margin-top:12px;text-align:center"><button class="btn" id="woMore" hidden>Show more</button></div>
+      </div>
+    </section>
+
+    <!-- SLEEP -->
+    <section data-pane="sleep" hidden>
+      <div class="card">
+        <div class="row">
+          <h2 class="h2" style="margin:0">Sleep</h2>
+          <div class="seg" id="slRange"><button data-r="14">14d</button><button data-r="30" class="on">30d</button><button data-r="90">90d</button><button data-r="99999">All</button></div>
+        </div>
+        <div id="slSummary" class="sum" style="margin-top:12px"></div>
+        <div class="chart" id="cStages"></div>
+        <div class="legend"><span><i style="background:#FFFFFF"></i>REM</span><span><i style="background:#B8B6B0"></i>Deep</span><span><i style="background:#6E6C66"></i>Light</span><span><i style="background:#38362F"></i>Awake</span><span><i style="background:transparent;border-top:2px dashed #F08A6C;height:0;width:12px;border-radius:0"></i>Sleep need</span></div>
+        <div class="chart" id="cSlPerf"></div>
+        <div class="chart" id="cResp"></div>
+      </div>
+    </section>
+
+    <div class="status" id="foot" style="text-align:center;margin-top:8px"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+/* ================= auth (same flow as before) ================= */
+const KEY='whoop_tokens_v1', CACHE='whoop_cache_v2';
+const CLIENT_ID='98f1fb98-66fd-4027-ac09-d94bcc4ebbb7';
+const REDIRECT=location.origin+'/api/whoop-callback';
+const SCOPES='read:recovery read:sleep read:workout read:cycles read:profile read:body_measurement offline';
+const $=id=>document.getElementById(id);
+const ls={get(k){try{return JSON.parse(localStorage.getItem(k))}catch{return null}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch{}},del(k){try{localStorage.removeItem(k)}catch{}}};
+
+if(location.hash.includes('whoop_access')){
+  const h=new URLSearchParams(location.hash.slice(1));
+  const access=h.get('whoop_access'), refresh=h.get('whoop_refresh');
+  if(access) ls.set(KEY,{access,refresh,expires:Number(h.get('whoop_expires'))||Date.now()+3500e3});
+  history.replaceState(null,'',location.pathname);
+}
+$('connectBtn').onclick=()=>{
+  location.href='https://api.prod.whoop.com/oauth/oauth2/auth?client_id='+encodeURIComponent(CLIENT_ID)+
+    '&redirect_uri='+encodeURIComponent(REDIRECT)+'&response_type=code&scope='+encodeURIComponent(SCOPES)+
+    '&state='+Math.random().toString(36).slice(2);
+};
+$('discBtn').onclick=()=>{ls.del(KEY);ls.del(CACHE);location.reload()};
+$('refreshBtn').onclick=()=>sync(false);
+
+async function refreshToken(t){
+  if(!t||!t.refresh) return null;
+  try{
+    const r=await fetch('/api/whoop-refresh',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({refresh_token:t.refresh})});
+    const j=await r.json();
+    if(j.access_token){const n={access:j.access_token,refresh:j.refresh_token||t.refresh,expires:Date.now()+(j.expires_in||3500)*1000};ls.set(KEY,n);return n}
+  }catch{}
+  return null;
+}
+async function token(){
+  let t=ls.get(KEY); if(!t) return null;
+  if(t.expires && Date.now()>t.expires-60e3){const n=await refreshToken(t); if(n) t=n;}
+  return t;
+}
+async function api(path,params){
+  let t=await token(); if(!t) throw new Error('not connected');
+  const q=new URLSearchParams(params||{}); q.set('path',path);
+  const go=tk=>fetch('/api/whoop-data?'+q,{headers:{Authorization:'Bearer '+tk.access,Accept:'application/json'}});
+  let r=await go(t);
+  if(r.status===401){const n=await refreshToken(t); if(!n) throw new Error('Session expired. Disconnect and connect again.'); r=await go(n);}
+  if(r.status===429){await new Promise(s=>setTimeout(s,3000)); r=await go(await token());}
+  if(!r.ok) throw new Error('WHOOP '+r.status+' on '+path+': '+(await r.text()).slice(0,160));
+  return r.json();
+}
+/* Paginate a collection. Stops at `since` (ISO) if given. */
+async function all(path,since,label){
+  const out=[]; let next=null, page=0;
+  do{
+    const p={limit:25}; if(since) p.start=since; if(next) p.nextToken=next;
+    const j=await api(path,p); out.push(...(j.records||[])); next=j.next_token||null; page++;
+    if(label) $('progress').textContent=label+': '+out.length+' loaded';
+  }while(next && page<400);
+  return out;
+}
+
+/* ================= data store ================= */
+let DB=ls.get(CACHE)||{cycles:{},recoveries:{},sleeps:{},workouts:{},body:null,synced:null};
+const put=(bucket,arr,key)=>arr.forEach(x=>{DB[bucket][x[key]||x.id]=x});
+
+async function sync(first){
+  showErr('');
+  const isFirst=first||!DB.synced;
+  if(isFirst){show('loading');}
+  $('status').textContent='syncing…';
+  try{
+    // incremental: re-pull the last 4 days so in-progress days update
+    const since=isFirst?null:new Date(Date.now()-4*864e5).toISOString();
+    put('cycles',await all('/cycle',since,'Days'),'id');
+    put('recoveries',await all('/recovery',since,'Recoveries'),'cycle_id');
+    put('sleeps',await all('/activity/sleep',since,'Sleeps'),'id');
+    put('workouts',await all('/activity/workout',since,'Workouts'),'id');
+    if(isFirst||!DB.body){try{DB.body=await api('/user/measurement/body')}catch{}}
+    DB.synced=new Date().toISOString(); ls.set(CACHE,DB);
+  }catch(e){showErr(e.message||String(e)); if(!DB.synced){show('disconnected');return}}
+  build(); show('app');
+}
+function show(which){['disconnected','loading','app'].forEach(id=>$(id).hidden=id!==which);$('topActions').hidden=which!=='app';$('topActions').style.display=which==='app'?'flex':'none'}
+function showErr(m){$('errBox').textContent=m||'';$('errBox').hidden=!m}
+
+/* ================= model ================= */
+const kcal=kj=>kj==null?null:kj/4.184;
+const hrs=ms=>ms==null?null:ms/36e5;
+const pad=n=>String(n).padStart(2,'0');
+const localKey=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+const dayKey=iso=>localKey(new Date(new Date(iso).getTime()+6*36e5)); // cycle starts at sleep onset; shift so it lands on the wake day
+const fmtD=(k,o)=>new Date(k+'T12:00:00').toLocaleDateString(undefined,o||{weekday:'short',month:'short',day:'numeric'});
+const hm=h=>h==null?'—':Math.floor(h)+'h '+pad(Math.round((h%1)*60))+'m';
+const r0=v=>v==null||isNaN(v)?'—':Math.round(v).toLocaleString();
+const r1=v=>v==null||isNaN(v)?'—':(Math.round(v*10)/10).toFixed(1);
+const zone=v=>v==null?null:v>=67?'good':v>=34?'warn':'bad';
+const ZC={good:'#6BE3A4',warn:'#F2C063',bad:'#FF8A8A'}, ZN={good:'Green',warn:'Yellow',bad:'Red'};
+const mean=a=>{const v=a.filter(x=>x!=null&&!isNaN(x));return v.length?v.reduce((s,x)=>s+x,0)/v.length:null};
+const sum=a=>a.filter(x=>x!=null).reduce((s,x)=>s+x,0);
+
+let DAYS=[], WORKOUTS=[];
+function model(){
+  const byDay={};
+  const rec=Object.values(DB.recoveries), recByCycle={}; rec.forEach(r=>recByCycle[r.cycle_id]=r);
+  const sleepByCycle={}; Object.values(DB.sleeps).filter(s=>!s.nap).forEach(s=>{ if(s.cycle_id!=null) sleepByCycle[s.cycle_id]=s; });
+  Object.values(DB.cycles).forEach(c=>{
+    const k=dayKey(c.start), sc=c.score||{}, r=(recByCycle[c.id]||{}).score||{}, s=sleepByCycle[c.id], ss=(s&&s.score)||{}, st=ss.stage_summary||{}, need=ss.sleep_needed||{};
+    const inBed=hrs(st.total_in_bed_time_milli), awake=hrs(st.total_awake_time_milli);
+    byDay[k]={date:k, cycle:c, inProgress:!c.end,
+      recovery:r.recovery_score??null, hrv:r.hrv_rmssd_milli??null, rhr:r.resting_heart_rate??null, spo2:r.spo2_percentage??null, skin:r.skin_temp_celsius??null,
+      strain:sc.strain??null, cal:kcal(sc.kilojoule), avgHr:sc.average_heart_rate??null, maxHr:sc.max_heart_rate??null,
+      steps:sc.step_count??c.step_count??null,
+      asleep:inBed!=null&&awake!=null?inBed-awake:null, inBed, awake, rem:hrs(st.total_rem_sleep_time_milli), deep:hrs(st.total_slow_wave_sleep_time_milli), light:hrs(st.total_light_sleep_time_milli),
+      need: need.baseline_milli!=null?hrs((need.baseline_milli||0)+(need.need_from_sleep_debt_milli||0)+(need.need_from_recent_strain_milli||0)-(need.need_from_recent_nap_milli||0)):null,
+      sleepPerf:ss.sleep_performance_percentage??null, sleepEff:ss.sleep_efficiency_percentage??null, resp:ss.respiratory_rate??null};
+  });
+  DAYS=Object.values(byDay).sort((a,b)=>a.date<b.date?-1:1);
+  WORKOUTS=Object.values(DB.workouts).map(w=>{const s=w.score||{},z=s.zone_durations||{};return{
+    id:w.id,start:w.start,date:localKey(new Date(w.start)),sport:prettySport(w.sport_name),min:(new Date(w.end)-new Date(w.start))/6e4,
+    strain:s.strain??null,cal:kcal(s.kilojoule),avg:s.average_heart_rate??null,max:s.max_heart_rate??null,dist:s.distance_meter??null,
+    z:[(z.zone_zero_milli||0)+(z.zone_one_milli||0),z.zone_two_milli||0,z.zone_three_milli||0,z.zone_four_milli||0,z.zone_five_milli||0]}})
+    .sort((a,b)=>a.start<b.start?1:-1);
+}
+function prettySport(s){if(!s)return'Activity';return s.replace(/[-_]/g,' ').replace(/\b\w/g,c=>c.toUpperCase())}
+const lastN=(n)=>DAYS.slice(Math.max(0,DAYS.length-n));
+function baseline(key,idx,n=30){const v=DAYS.slice(Math.max(0,idx-n),idx).map(d=>d[key]).filter(x=>x!=null);if(v.length<5)return null;const m=mean(v);return{m,sd:Math.sqrt(mean(v.map(x=>(x-m)**2)))||1e-9}}
+function zdot(v,b,higherBetter){if(v==null||!b)return'';const z=(v-b.m)/b.sd, s=higherBetter===null?-Math.abs(z):higherBetter?z:-z;
+  if(higherBetter===null) return Math.abs(z)<1?'d-norm':Math.abs(z)<2?'d-warn':'d-bad';
+  return s>=0.5?'d-good':s>=-0.5?'d-norm':s>=-1.5?'d-warn':'d-bad'}
+
+/* ================= render ================= */
+function build(){
+  model();
+  $('status').textContent='synced '+new Date(DB.synced).toLocaleTimeString([], {hour:'numeric',minute:'2-digit'});
+  const b=DB.body; $('foot').textContent=DAYS.length+' days · '+WORKOUTS.length+' workouts'+(DAYS.length?' · since '+fmtD(DAYS[0].date,{month:'short',day:'numeric',year:'numeric'}):'')+(b&&b.max_heart_rate?' · max HR '+b.max_heart_rate:'');
+  renderToday(); renderTrends(); renderSportOptions(); renderWorkouts(); renderSleep();
+}
+
+function tile(label,val,unit,sub,dot){return`<div class="tile">${dot?`<span class="dot ${dot}"></span>`:''}<div class="tl">${label}</div><div class="tv">${val}${unit?`<small>${unit}</small>`:''}</div><div class="ts">${sub||'&nbsp;'}</div></div>`}
+
+function renderToday(){
+  if(!DAYS.length){$('todayTiles').innerHTML='<div class="empty">No data yet.</div>';return}
+  const i=DAYS.length-1, d=DAYS[i];
+  // latest recovery may belong to today's cycle; if not scored yet use previous
+  let ri=i; while(ri>=0&&DAYS[ri].recovery==null) ri--;
+  const r=ri>=0?DAYS[ri]:{};
+  $('todayDate').textContent=fmtD(d.date)+(d.inProgress?' · in progress':'');
+  const z=zone(r.recovery), col=z?ZC[z]:'#fff';
+  $('recNum').textContent=r0(r.recovery); $('recLbl').textContent=z?ZN[z]:'Not scored yet'; $('recLbl').style.color=col;
+  const f=$('ringFill'); f.style.stroke=col; f.style.strokeDashoffset=603.19*(1-(r.recovery||0)/100);
+  const bH=baseline('hrv',ri), bR=baseline('rhr',ri), bS=baseline('steps',i), bC=baseline('cal',i), bResp=baseline('resp',ri);
+  $('todayTiles').innerHTML=[
+    tile('HRV',r0(r.hrv),'ms',bH?'30d avg '+r0(bH.m):'',zdot(r.hrv,bH,true)),
+    tile('Resting HR',r0(r.rhr),'bpm',bR?'30d avg '+r0(bR.m):'',zdot(r.rhr,bR,false)),
+    tile('Sleep',hm(r.asleep),'',r.need!=null?'needed '+hm(r.need):'',r.sleepPerf==null?'':r.sleepPerf>=85?'d-good':r.sleepPerf>=70?'d-norm':'d-warn'),
+    tile('Strain',r1(d.strain),'',d.inProgress?'so far today':'',''),
+    tile('Calories',r0(d.cal),'kcal',bC?'30d avg '+r0(bC.m):'',''),
+    tile('Steps',r0(d.steps),'',d.steps==null?'not reported':bS?'30d avg '+r0(bS.m):'',''),
+    tile('Avg HR today',r0(d.avgHr),'bpm','max '+r0(d.maxHr),''),
+    tile('Blood O₂',r.spo2!=null?r1(r.spo2):'—','%','',r.spo2==null?'':r.spo2>=95?'d-norm':r.spo2>=92?'d-warn':'d-bad'),
+    tile('Resp rate',r1(r.resp),'rpm',bResp?'30d avg '+r1(bResp.m):'',zdot(r.resp,bResp,null)),
+  ].join('');
+  const call=$('call');
+  call.style.borderLeftColor=col;
+  call.innerHTML=!z?'Recovery not scored yet for today.':
+    z==='good'?'<b>Green.</b> Ready for a hard day: full practice, conditioning or a heavy lift.':
+    z==='warn'?'<b>Yellow.</b> Train, but keep intensity in check. A normal practice is fine. Skip stacking a hard lift on top of it.':
+    '<b>Red.</b> Make it a recovery day: light shooting, mobility and extra sleep tonight.';
+  const tw=WORKOUTS.filter(w=>w.date===localKey(new Date()));
+  $('todayWorkouts').innerHTML=tw.length?woTable(tw):'<div class="empty">No workouts logged today yet.</div>';
+}
+
+function woTable(list){
+  return`<div class="tw"><table><thead><tr><th>Time</th><th>Activity</th><th class="num">Min</th><th class="num">Strain</th><th class="num">Cal</th><th class="num">Avg / Max HR</th><th>Zones</th></tr></thead><tbody>${
+    list.map(w=>`<tr><td>${new Date(w.start).toLocaleTimeString([], {hour:'numeric',minute:'2-digit'})}</td><td>${esc(w.sport)}</td><td class="num">${r0(w.min)}</td><td class="num">${r1(w.strain)}</td><td class="num">${r0(w.cal)}</td><td class="num">${r0(w.avg)} / ${r0(w.max)}</td><td>${zbar(w.z)}</td></tr>`).join('')}</tbody></table></div>`;
+}
+const ZCOL=['#3A3A3E','#7FB2FF','#6BE3A4','#F2C063','#FF8A8A'];
+function zbar(z){const t=sum(z)||1;return`<div class="zbar" title="Zones">${z.map((v,i)=>v?`<span style="width:${v/t*100}%;background:${ZCOL[i]}"></span>`:'').join('')}</div>`}
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* ---------- generic chart ---------- */
+function chart(el,{title,pts,type,color,colorFn,yMin,yMax,fmt,ref,stack,avgLabel}){
+  el.innerHTML='';
+  const vals=pts.flatMap(p=>stack?[sum(p.stack)]:[p.v]).concat(ref?pts.map(p=>p.ref):[]).filter(v=>v!=null&&!isNaN(v));
+  const head=document.createElement('div');head.className='ct';
+  head.innerHTML=`<b>${title}</b><span>${avgLabel||''}</span>`;el.appendChild(head);
+  if(!vals.length){el.insertAdjacentHTML('beforeend','<div class="empty">No data in this range.</div>');return}
+  const W=Math.max(280,el.clientWidth), H=150, L=40, R=6, T=6, B=20, pw=W-L-R, ph=H-T-B;
+  let lo=yMin!=null?yMin:Math.min(...vals), hi=yMax!=null?yMax:Math.max(...vals);
+  if(yMin==null){const p=(hi-lo)*0.15||1;lo=Math.floor(lo-p);hi=Math.ceil(hi+p)}
+  if(yMax==null&&yMin!=null) hi=hi*1.08||1;
+  const y=v=>T+ph-(v-lo)/(hi-lo)*ph, n=pts.length, step=pw/n, x=i=>L+step*i+step/2;
+  let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(title)}">`;
+  for(let i=0;i<=3;i++){const v=lo+(hi-lo)*i/3,yy=y(v);s+=`<line x1="${L}" x2="${W-R}" y1="${yy}" y2="${yy}" stroke="rgba(255,255,255,${i?0.05:0.15})"/><text x="${L-6}" y="${yy+3}" text-anchor="end">${Math.abs(hi-lo)>=1000?Math.round(v/100)/10+'k':Math.round(v)}</text>`}
+  const every=Math.max(1,Math.ceil(n/Math.floor(pw/58)));
+  pts.forEach((p,i)=>{if(i%every===0)s+=`<text x="${x(i)}" y="${H-5}" text-anchor="middle">${p.lbl}</text>`});
+  const bw=Math.max(1.5,Math.min(16,step-2));
+  if(stack){
+    pts.forEach((p,i)=>{if(!p.stack)return;let acc=0;p.stack.forEach((v,k)=>{if(!v)return;const y0=y(acc),y1=y(acc+v);s+=`<rect x="${x(i)-bw/2}" y="${y1}" width="${bw}" height="${Math.max(0,y0-y1-1)}" fill="${p.colors[k]}" rx="1.5"/>`;acc+=v})});
+  }else if(type==='bar'){
+    pts.forEach((p,i)=>{if(p.v==null)return;const top=y(p.v),base=y(lo),h=Math.max(1,base-top);s+=`<rect x="${x(i)-bw/2}" y="${top}" width="${bw}" height="${h}" rx="${Math.min(3,bw/2)}" fill="${colorFn?colorFn(p.v):color}"/>`});
+  }else{
+    let d='',pen=false;pts.forEach((p,i)=>{if(p.v==null){pen=false;return}d+=(pen?'L':'M')+x(i).toFixed(1)+','+y(p.v).toFixed(1);pen=true});
+    s+=`<path d="${d}" fill="none" stroke="${color}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>`;
+    const m=mean(pts.map(p=>p.v));if(m!=null)s+=`<line x1="${L}" x2="${W-R}" y1="${y(m)}" y2="${y(m)}" stroke="rgba(255,255,255,0.25)" stroke-dasharray="4 4"/>`;
+  }
+  if(ref){let d='',pen=false;pts.forEach((p,i)=>{if(p.ref==null){pen=false;return}d+=(pen?'L':'M')+x(i).toFixed(1)+','+y(p.ref).toFixed(1);pen=true});s+=`<path d="${d}" fill="none" stroke="#F08A6C" stroke-width="1.5" stroke-dasharray="4 3"/>`}
+  s+=`<line class="cx" y1="${T}" y2="${T+ph}" stroke="rgba(255,255,255,0.3)" opacity="0"/><rect class="hit" x="${L}" y="${T}" width="${pw}" height="${ph}" fill="transparent"/></svg>`;
+  el.insertAdjacentHTML('beforeend',s);
+  const tip=document.createElement('div');tip.className='tip';el.appendChild(tip);
+  const svg=el.querySelector('svg'),cx=svg.querySelector('.cx');
+  const move=e=>{const r=svg.getBoundingClientRect(),px=((e.touches?e.touches[0].clientX:e.clientX)-r.left)/r.width*W;
+    const i=Math.max(0,Math.min(n-1,Math.floor((px-L)/step))),p=pts[i];cx.setAttribute('x1',x(i));cx.setAttribute('x2',x(i));cx.setAttribute('opacity',1);
+    tip.innerHTML=`<div class="d">${esc(p.full)}</div>${p.v==null&&!p.stack?'No data':fmt(p)}`;tip.style.opacity=1;
+    const left=x(i)/W*r.width;tip.style.left=Math.min(Math.max(0,left-tip.offsetWidth/2),r.width-tip.offsetWidth)+'px';tip.style.top='-8px'};
+  const leave=()=>{cx.setAttribute('opacity',0);tip.style.opacity=0};
+  svg.querySelector('.hit').addEventListener('pointermove',move);svg.querySelector('.hit').addEventListener('pointerleave',leave);
+}
+const lbl=k=>fmtD(k,{month:'numeric',day:'numeric'});
+
+/* ---------- trends ---------- */
+let RANGE=30;
+function stat(l,v,s){return`<div class="tile"><div class="tl">${l}</div><div class="tv">${v}</div><div class="ts">${s||'&nbsp;'}</div></div>`}
+function renderTrends(){
+  const rows=lastN(RANGE).filter(d=>!d.inProgress||d.recovery!=null);
+  const P=k=>rows.map(d=>({v:d[k],lbl:lbl(d.date),full:fmtD(d.date)}));
+  const greens=rows.filter(d=>zone(d.recovery)==='good').length, scored=rows.filter(d=>d.recovery!=null).length;
+  $('trendSummary').innerHTML=[
+    stat('Avg recovery',r0(mean(rows.map(d=>d.recovery)))+'%',scored?Math.round(greens/scored*100)+'% green days':''),
+    stat('Avg HRV',r0(mean(rows.map(d=>d.hrv)))+' ms',''),
+    stat('Avg sleep',hm(mean(rows.map(d=>d.asleep))),''),
+    stat('Total calories',r0(sum(rows.map(d=>d.cal))),r0(mean(rows.map(d=>d.cal)))+' per day'),
+    stat('Avg steps',r0(mean(rows.map(d=>d.steps))),''),
+  ].join('');
+  chart($('cRec'),{title:'Recovery',pts:P('recovery'),type:'bar',yMin:0,yMax:100,colorFn:v=>ZC[zone(v)],fmt:p=>`<b>${r0(p.v)}%</b> · ${ZN[zone(p.v)]}`,avgLabel:'green 67+ · yellow 34–66 · red <34'});
+  chart($('cHrv'),{title:'HRV (ms)',pts:P('hrv'),type:'line',color:'#E8E5DD',fmt:p=>`<b>${r0(p.v)} ms</b>`,avgLabel:'dashed line = average'});
+  chart($('cRhr'),{title:'Resting heart rate (bpm)',pts:P('rhr'),type:'line',color:'#E8E5DD',fmt:p=>`<b>${r0(p.v)} bpm</b>`});
+  chart($('cStrain'),{title:'Day strain',pts:P('strain'),type:'bar',yMin:0,yMax:21,color:'#E07658',fmt:p=>`<b>${r1(p.v)}</b> strain`});
+  chart($('cCal'),{title:'Calories burned (kcal)',pts:P('cal'),type:'bar',yMin:0,color:'#F2C063',fmt:p=>`<b>${r0(p.v)} kcal</b>`});
+  chart($('cSteps'),{title:'Steps',pts:P('steps'),type:'bar',yMin:0,color:'#7FB2FF',fmt:p=>`<b>${r0(p.v)}</b> steps`});
+  chart($('cDayHr'),{title:'Average heart rate per day (bpm)',pts:rows.map(d=>({v:d.avgHr,max:d.maxHr,lbl:lbl(d.date),full:fmtD(d.date)})),type:'line',color:'#FF8A8A',fmt:p=>`avg <b>${r0(p.v)}</b> · max <b>${r0(p.max)}</b> bpm`});
+}
+$('rangeSeg').onclick=e=>{const b=e.target.closest('button');if(!b)return;RANGE=+b.dataset.r;[...$('rangeSeg').children].forEach(c=>c.classList.toggle('on',c===b));renderTrends()};
+
+/* ---------- workouts ---------- */
+let WR=30, WSPORT='', WSHOW=25;
+function renderSportOptions(){
+  const counts={};WORKOUTS.forEach(w=>counts[w.sport]=(counts[w.sport]||0)+1);
+  const sel=$('sportSel'), cur=sel.value;
+  sel.innerHTML='<option value="">All activities</option>'+Object.entries(counts).sort((a,b)=>b[1]-a[1]).map(([s,n])=>`<option value="${esc(s)}">${esc(s)} (${n})</option>`).join('');
+  sel.value=cur;
+}
+function renderWorkouts(){
+  const cut=localKey(new Date(Date.now()-WR*864e5));
+  const list=WORKOUTS.filter(w=>w.date>=cut&&(!WSPORT||w.sport===WSPORT));
+  const z=[0,1,2,3,4].map(i=>sum(list.map(w=>w.z[i])));
+  const zt=sum(z)||1;
+  $('woSummary').innerHTML=[
+    stat('Workouts',list.length,''),
+    stat('Time',hm(sum(list.map(w=>w.min))/60),''),
+    stat('Calories',r0(sum(list.map(w=>w.cal))),'kcal'),
+    stat('Avg strain',r1(mean(list.map(w=>w.strain))),''),
+    stat('Time in zone 4–5',Math.round((z[3]+z[4])/zt*100)+'%',hm((z[3]+z[4])/36e5)),
+  ].join('');
+  // weekly stacked minutes by zone
+  const weeks={};list.forEach(w=>{const d=new Date(w.date+'T12:00:00');d.setDate(d.getDate()-((d.getDay()+6)%7));const k=localKey(d);weeks[k]=weeks[k]||[0,0,0,0,0];w.z.forEach((v,i)=>weeks[k][i]+=v/6e4)});
+  const wk=Object.keys(weeks).sort();
+  chart($('cWoWeek'),{title:'Weekly training minutes by heart rate zone',pts:wk.map(k=>({stack:weeks[k],colors:ZCOL,lbl:lbl(k),full:'Week of '+fmtD(k,{month:'short',day:'numeric'})})),stack:true,yMin:0,
+    fmt:p=>`<b>${r0(sum(p.stack))} min</b><br>`+p.stack.map((v,i)=>v>=1?`<span style="color:${ZCOL[i]}">■</span> ${i===0?'Zone 0–1':'Zone '+(i+1)}: ${r0(v)} min`:'').filter(Boolean).join('<br>')});
+  const shown=list.slice(0,WSHOW);
+  $('woBody').innerHTML=shown.length?shown.map(w=>`<tr><td>${fmtD(w.date)} <span style="color:var(--t3)">${new Date(w.start).toLocaleTimeString([], {hour:'numeric',minute:'2-digit'})}</span></td><td>${esc(w.sport)}</td><td class="num">${r0(w.min)}m</td><td class="num">${r1(w.strain)}</td><td class="num">${r0(w.cal)}</td><td class="num">${r0(w.avg)}</td><td class="num">${r0(w.max)}</td><td>${zbar(w.z)}</td><td class="num">${w.dist?(w.dist/1609.34).toFixed(2)+' mi':'—'}</td></tr>`).join(''):'<tr><td colspan="9" class="empty">No workouts in this range.</td></tr>';
+  $('woMore').hidden=list.length<=WSHOW;
+}
+$('sportSel').onchange=e=>{WSPORT=e.target.value;WSHOW=25;renderWorkouts()};
+$('woRange').onclick=e=>{const b=e.target.closest('button');if(!b)return;WR=+b.dataset.r;WSHOW=25;[...$('woRange').children].forEach(c=>c.classList.toggle('on',c===b));renderWorkouts()};
+$('woMore').onclick=()=>{WSHOW+=25;renderWorkouts()};
+
+/* ---------- sleep ---------- */
+let SR=30;
+function renderSleep(){
+  const rows=lastN(SR).filter(d=>d.asleep!=null);
+  $('slSummary').innerHTML=[
+    stat('Avg asleep',hm(mean(rows.map(d=>d.asleep))),''),
+    stat('Avg need',hm(mean(rows.map(d=>d.need))),''),
+    stat('Avg performance',r0(mean(rows.map(d=>d.sleepPerf)))+'%',''),
+    stat('Avg deep',hm(mean(rows.map(d=>d.deep))),''),
+    stat('Avg REM',hm(mean(rows.map(d=>d.rem))),''),
+  ].join('');
+  const SC=['#FFFFFF','#B8B6B0','#6E6C66','#38362F'];
+  chart($('cStages'),{title:'Sleep stages (hours)',pts:rows.map(d=>({stack:[d.rem,d.deep,d.light,d.awake],colors:SC,ref:d.need,lbl:lbl(d.date),full:fmtD(d.date)})),stack:true,ref:true,yMin:0,
+    fmt:p=>`asleep <b>${hm(p.stack[0]+p.stack[1]+p.stack[2])}</b>${p.ref!=null?' · need '+hm(p.ref):''}<br>REM ${hm(p.stack[0])} · deep ${hm(p.stack[1])}<br>light ${hm(p.stack[2])} · awake ${hm(p.stack[3])}`});
+  chart($('cSlPerf'),{title:'Sleep performance (%)',pts:rows.map(d=>({v:d.sleepPerf,lbl:lbl(d.date),full:fmtD(d.date)})),type:'bar',yMin:0,yMax:100,colorFn:v=>v>=85?'#6BE3A4':v>=70?'#B8B6B0':'#F2C063',fmt:p=>`<b>${r0(p.v)}%</b>`});
+  chart($('cResp'),{title:'Respiratory rate (rpm)',pts:rows.map(d=>({v:d.resp,lbl:lbl(d.date),full:fmtD(d.date)})),type:'line',color:'#7FB2FF',fmt:p=>`<b>${r1(p.v)} rpm</b>`});
+}
+$('slRange').onclick=e=>{const b=e.target.closest('button');if(!b)return;SR=+b.dataset.r;[...$('slRange').children].forEach(c=>c.classList.toggle('on',c===b));renderSleep()};
+
+/* ---------- tabs ---------- */
+$('tabs').onclick=e=>{const b=e.target.closest('button');if(!b)return;[...$('tabs').children].forEach(c=>c.classList.toggle('on',c===b));
+  document.querySelectorAll('[data-pane]').forEach(p=>p.hidden=p.dataset.pane!==b.dataset.tab);
+  if(DAYS.length){renderTrends();renderWorkouts();renderSleep()}};
+let rt;window.addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>DAYS.length&&build(),200)});
+
+/* ---------- start ---------- */
+if(!ls.get(KEY)){show('disconnected')}
+else{
+  if(DB.synced){build();show('app')}
+  sync(!DB.synced);
+  // auto-refresh every 5 minutes while the page is open and visible
+  setInterval(()=>{if(document.visibilityState==='visible')sync(false)},5*60e3);
+  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&DB.synced&&Date.now()-new Date(DB.synced)>2*60e3)sync(false)});
+}
+})();
+</script>
+</body>
+</html>
